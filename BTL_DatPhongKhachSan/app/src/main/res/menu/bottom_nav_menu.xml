@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/outline_cabin_24"
+        android:title="@string/nav_home" />
+    <item
+        android:id="@+id/nav_bookings"
+        android:icon="@drawable/outline_book_2_24"
+        android:title="@string/nav_bookings" />
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/outline_article_person_24"
+        android:title="@string/nav_profile" />
+</menu>

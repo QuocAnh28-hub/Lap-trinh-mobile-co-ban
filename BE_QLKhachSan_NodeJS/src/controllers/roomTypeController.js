@@ -1,0 +1,208 @@
+const { sql } = require("../config/db");
+
+const toPositiveInt = (value) => {
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return null;
+  }
+
+  return parsed;
+};
+
+const toDateString = (value) => {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const normalized = value.trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+    return null;
+  }
+
+  const [year, month, day] = normalized.split("-").map(Number);
+  const parsedDate = new Date(`${normalized}T00:00:00Z`);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return null;
+  }
+
+  if (
+    parsedDate.getUTCFullYear() !== year ||
+    parsedDate.getUTCMonth() + 1 !== month ||
+    parsedDate.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  return normalized;
+};
+
+const getRoomTypes = async (req, res) => {
+  console.log("getRoomTypes called");
+  try {
+    const result = await sql.query`SELECT * FROM RoomTypes`;
+    console.log("getRoomTypes result rows:", result.recordset.length);
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("getRoomTypes Error:", err);
+    res
+      .status(500)
+      .json({ error: "Lỗi server", detail: err.message, stack: err.stack });
+  }
+};
+
+const getRoomTypesWithPrice = async (req, res) => {
+  console.log("getRoomTypesWithPrice2 called");
+  try {
+    const request = new sql.Request();
+    const result = await request.execute("sp_GetRoomTypesWithPrice2");
+    console.log("getRoomTypesWithPrice2 result rows:", result.recordset.length);
+    return res.json(result.recordset || []);
+  } catch (err) {
+    console.error("getRoomTypesWithPrice2 Error:", err);
+    return res
+      .status(500)
+      .json({ error: "Lỗi server", detail: err.message, stack: err.stack });
+  }
+};
+
+const addRoomType = async (req, res) => {
+  console.log("addRoomType called", req.body);
+  try {
+    const { Name, Description, Capacity, DefaultPrice, ImageUrl } = req.body;
+    if (!Name || !Capacity || !DefaultPrice) {
+      return res.status(400).json({ error: "Thiếu tham số bắt buộc" });
+    }
+
+    const request = new sql.Request();
+    request.input("Name", sql.NVarChar(100), Name);
+    request.input("Description", sql.NVarChar(sql.MAX), Description ?? null);
+    request.input("Capacity", sql.Int, Capacity);
+    request.input("DefaultPrice", sql.Decimal(12, 2), DefaultPrice);
+    request.input("ImageUrl", sql.NVarChar(255), ImageUrl ?? null);
+
+    const result = await request.execute("sp_AddRoomType");
+
+    return res.status(201).json({
+      message: "Thêm loại phòng thành công",
+      data: result.recordset || [],
+    });
+  } catch (err) {
+    console.error("addRoomType Error:", err);
+    res
+      .status(500)
+      .json({ error: "Lỗi server", detail: err.message, stack: err.stack });
+  }
+};
+
+const updateRoomType = async (req, res) => {
+  console.log("updateRoomType called", req.params, req.body);
+  try {
+    const RoomTypeID = parseInt(req.params.id, 10);
+    const { Name, Description, Capacity, DefaultPrice, ImageUrl } = req.body;
+
+    if (!RoomTypeID || !Name || !Capacity || !DefaultPrice) {
+      return res
+        .status(400)
+        .json({ error: "Thiếu tham số bắt buộc hoặc id không hợp lệ" });
+    }
+
+    const request = new sql.Request();
+    request.input("RoomTypeID", sql.Int, RoomTypeID);
+    request.input("Name", sql.NVarChar(100), Name);
+    request.input("Description", sql.NVarChar(sql.MAX), Description ?? null);
+    request.input("Capacity", sql.Int, Capacity);
+    request.input("DefaultPrice", sql.Decimal(12, 2), DefaultPrice);
+    request.input("ImageUrl", sql.NVarChar(255), ImageUrl ?? null);
+
+    const result = await request.execute("sp_UpdateRoomType");
+
+    return res.json({
+      message: "Cập nhật loại phòng thành công",
+      data: result.recordset || [],
+    });
+  } catch (err) {
+    console.error("updateRoomType Error:", err);
+    res
+      .status(500)
+      .json({ error: "Lỗi server", detail: err.message, stack: err.stack });
+  }
+};
+
+const deleteRoomType = async (req, res) => {
+  console.log("deleteRoomType called", req.params);
+  try {
+    const RoomTypeID = parseInt(req.params.id, 10);
+    if (!RoomTypeID) {
+      return res.status(400).json({ error: "id không hợp lệ" });
+    }
+
+    await sql.query`
+      EXEC sp_DeleteRoomType
+        @RoomTypeID=${RoomTypeID}
+    `;
+    return res.json({ message: "Xóa loại phòng thành công" });
+  } catch (err) {
+    console.error("deleteRoomType Error:", err);
+    res
+      .status(500)
+      .json({ error: "Lỗi server", detail: err.message, stack: err.stack });
+  }
+};
+
+const searchAvailableRoomTypes = async (req, res) => {
+  console.log("searchAvailableRoomTypes called", req.query, req.body);
+  try {
+    const checkInDate = toDateString(
+      req.query.CheckInDate || req.query.checkInDate || req.body?.CheckInDate,
+    );
+    const checkOutDate = toDateString(
+      req.query.CheckOutDate ||
+        req.query.checkOutDate ||
+        req.body?.CheckOutDate,
+    );
+    const numPeople = toPositiveInt(
+      req.query.NumPeople || req.query.numPeople || req.body?.NumPeople,
+    );
+    const numRooms = toPositiveInt(
+      req.query.NumRooms || req.query.numRooms || req.body?.NumRooms,
+    );
+
+    if (!checkInDate || !checkOutDate || !numPeople || !numRooms) {
+      return res.status(400).json({
+        error:
+          "Thiếu hoặc sai tham số: CheckInDate, CheckOutDate (yyyy-mm-dd), NumPeople, NumRooms",
+      });
+    }
+
+    if (checkInDate > checkOutDate) {
+      return res.status(400).json({
+        error: "CheckOutDate phải lớn hơn CheckInDate",
+      });
+    }
+
+    const request = new sql.Request();
+    request.input("CheckInDate", sql.Date, checkInDate);
+    request.input("CheckOutDate", sql.Date, checkOutDate);
+    request.input("NumPeople", sql.Int, numPeople);
+    request.input("NumRooms", sql.Int, numRooms);
+
+    const result = await request.execute("sp_SearchAvailableRoomTypes2");
+
+    return res.json(result.recordset || []);
+  } catch (err) {
+    console.error("searchAvailableRoomTypes Error:", err);
+    return res
+      .status(500)
+      .json({ error: "Lỗi server", detail: err.message, stack: err.stack });
+  }
+};
+
+module.exports = {
+  getRoomTypes,
+  getRoomTypesWithPrice,
+  addRoomType,
+  updateRoomType,
+  deleteRoomType,
+  searchAvailableRoomTypes,
+};
