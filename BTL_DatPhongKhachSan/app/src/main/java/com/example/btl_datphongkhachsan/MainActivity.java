@@ -87,21 +87,33 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
-                    Toast.makeText(MainActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    LoginResponse.Account account = loginResponse.getAccount();
                     
-                    // Lưu UserID vào SharedPreferences
-                    if (loginResponse.getAccount() != null) {
+                    if (account != null) {
+                        String role = account.getRole();
+                        
+                        // Lưu thông tin vào SharedPreferences
                         SharedPreferences sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("UserID", loginResponse.getAccount().getUserID());
-                        editor.putString("FullName", loginResponse.getAccount().getFullName());
+                        editor.putString("UserID", account.getUserID());
+                        editor.putString("FullName", account.getFullName());
+                        editor.putString("Role", role);
                         editor.apply();
-                    }
 
-                    // Chuyển sang HomeActivity
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                        Toast.makeText(MainActivity.this, "Chào mừng " + account.getFullName(), Toast.LENGTH_SHORT).show();
+
+                        Intent intent;
+                        // Kiểm tra Role để điều hướng
+                        if ("RECEPTIONIST".equalsIgnoreCase(role)) {
+                            // Nhân viên lễ tân vào trang Dashboard (thông qua R_Navigation)
+                            intent = new Intent(MainActivity.this, R_Navigation.class);
+                        } else {
+                            // Khách hàng vào trang HomeActivity
+                            intent = new Intent(MainActivity.this, HomeActivity.class);
+                        }
+                        startActivity(intent);
+                        finish();
+                    }
                 } else {
                     Toast.makeText(MainActivity.this, "Đăng nhập thất bại. Kiểm tra lại tài khoản!", Toast.LENGTH_SHORT).show();
                 }

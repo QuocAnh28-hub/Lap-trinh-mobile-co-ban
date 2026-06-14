@@ -15,6 +15,15 @@
         android:theme="@style/Theme.BTL_DatPhongKhachSan"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".R_Profile"
+            android:exported="false" />
+        <activity
+            android:name=".R_Navigation"
+            android:exported="false" />
+        <activity
+            android:name=".R_DashBoard"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
