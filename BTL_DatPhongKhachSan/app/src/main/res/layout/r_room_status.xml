@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Front Desk"
+                android:text="Trạng thái phòng"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="14sp"

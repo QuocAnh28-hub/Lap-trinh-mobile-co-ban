@@ -13,7 +13,7 @@
         android:icon="@drawable/outline_apartment_24"
         android:title="Rooms" />
     <item
-        android:id="@+id/nav_schedule"
+        android:id="@+id/nav_invoice"
         android:icon="@drawable/outline_calendar_meal_24"
         android:title="Invoice" />
     <item
