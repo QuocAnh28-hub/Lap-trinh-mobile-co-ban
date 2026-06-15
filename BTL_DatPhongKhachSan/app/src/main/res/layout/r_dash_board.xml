@@ -39,16 +39,6 @@
             app:layout_constraintStart_toEndOf="@id/ivProfile"
             app:layout_constraintTop_toTopOf="@id/ivProfile" />
 
-        <ImageView
-            android:id="@+id/ivNotification"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/outline_data_info_alert_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#3F51B5" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView

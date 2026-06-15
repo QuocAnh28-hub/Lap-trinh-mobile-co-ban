@@ -16,7 +16,7 @@
     <string name="azure_veridian">Azure Veridian</string>
 
     <!-- Sign Up Strings -->
-    <string name="the_curator">The QA Hotel</string>
+    <string name="the_curator">The QAS Hotel</string>
     <string name="create_account">Create Account</string>
     <string name="sign_up_subtitle">Join our community of global curators.</string>
     <string name="full_name">FULL NAME</string>
@@ -35,8 +35,8 @@
     <string name="check_out">Check-out</string>
     <string name="guests">Guests</string>
     <string name="check_availability">Check Availability</string>
-    <string name="emerald_experience">The QA Hotel Experience</string>
-    <string name="emerald_desc">Nestled in the heart of the city, The QA Hotel offers an sanctuary of calm and refined elegance.</string>
+    <string name="emerald_experience">The QAS Hotel Experience</string>
+    <string name="emerald_desc">Nestled in the heart of the city, The QAS Hotel offers an sanctuary of calm and refined elegance.</string>
     <string name="luxury_spa">Luxury Spa</string>
     <string name="heated_pool">Heated Pool</string>
     <string name="fine_dining">Fine Dining</string>
