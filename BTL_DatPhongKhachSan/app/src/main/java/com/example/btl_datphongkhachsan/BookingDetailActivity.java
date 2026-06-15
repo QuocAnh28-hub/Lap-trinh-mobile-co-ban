@@ -13,11 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_datphongkhachsan.api.RetrofitClient;
 import com.example.btl_datphongkhachsan.models.Reservation;
 import com.example.btl_datphongkhachsan.models.ReservationModifyRequest;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -90,7 +92,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         etCheckOut.addTextChangedListener(watcher);
         etQuantity.addTextChangedListener(watcher);
 
-        if (!"BOOKED".equalsIgnoreCase(reservation.getStatus())) {
+        if (reservation != null && !"BOOKED".equalsIgnoreCase(reservation.getStatus())) {
             btnSaveChanges.setVisibility(View.GONE);
             btnEditCheckIn.setEnabled(false);
             btnEditCheckOut.setEnabled(false);
@@ -136,9 +138,23 @@ public class BookingDetailActivity extends AppCompatActivity {
         
         etQuantity.setText(String.valueOf(reservation.getQuantity()));
 
-        String imageName = reservation.getRoomType().toLowerCase().replace(" room", "").replace(" ", "");
-        int resId = getResources().getIdentifier(imageName, "drawable", getPackageName());
-        ivRoomDetail.setImageResource(resId != 0 ? resId : android.R.drawable.ic_menu_gallery);
+        // Sử dụng Picasso để tải ảnh từ URL API (tương tự RoomTypeAdapter)
+        String imageUrl = reservation.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            if (imageUrl.contains("localhost")) {
+                imageUrl = imageUrl.replace("localhost", "10.0.2.2");
+            }
+            Picasso.get()
+                    .load(imageUrl)
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .error(android.R.drawable.ic_menu_report_image)
+                    .into(ivRoomDetail);
+        } else {
+            // Fallback: Nếu không có URL, lấy ảnh từ drawable theo tên
+            String imageName = reservation.getRoomType().toLowerCase().replace(" room", "").replace(" ", "");
+            int resId = getResources().getIdentifier(imageName, "drawable", getPackageName());
+            ivRoomDetail.setImageResource(resId != 0 ? resId : android.R.drawable.ic_menu_gallery);
+        }
     }
 
     private void showDatePicker(EditText editText, TextView tvFormatted) {
@@ -156,29 +172,36 @@ public class BookingDetailActivity extends AppCompatActivity {
     }
 
     private void updateReservation() {
-        ReservationModifyRequest request = new ReservationModifyRequest(
-                reservation.getRoomTypeID(),
-                Integer.parseInt(etQuantity.getText().toString()),
-                etCheckIn.getText().toString(),
-                etCheckOut.getText().toString()
-        );
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận cập nhật")
+                .setMessage("Bạn có chắc chắn muốn thay đổi thông tin đơn đặt phòng này không?")
+                .setPositiveButton("Đồng ý", (dialog, which) -> {
+                    ReservationModifyRequest request = new ReservationModifyRequest(
+                            reservation.getRoomTypeID(),
+                            Integer.parseInt(etQuantity.getText().toString()),
+                            etCheckIn.getText().toString(),
+                            etCheckOut.getText().toString()
+                    );
 
-        RetrofitClient.getApiService().modifyReservation(reservation.getReservationID(), request)
-                .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(BookingDetailActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(BookingDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(BookingDetailActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    RetrofitClient.getApiService().modifyReservation(reservation.getReservationID(), request)
+                            .enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    if (response.isSuccessful()) {
+                                        Toast.makeText(BookingDetailActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        Toast.makeText(BookingDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+                                    Toast.makeText(BookingDetailActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private long calculateNights(String start, String end) {

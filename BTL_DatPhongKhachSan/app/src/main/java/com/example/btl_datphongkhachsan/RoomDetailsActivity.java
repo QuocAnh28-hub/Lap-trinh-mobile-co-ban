@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_datphongkhachsan.models.RoomType;
+import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
@@ -48,13 +49,21 @@ public class RoomDetailsActivity extends AppCompatActivity {
         if (roomType != null) {
             tvRoomTitle.setText(roomType.getName());
             
-            // Tự động gán ảnh: Chuyển tên về chữ thường và xóa khoảng trắng (ví dụ: "Double 1" -> "double1")
-            String imageName = roomType.getName().toLowerCase().replace(" ", "");
-            int resId = getResources().getIdentifier(imageName, "drawable", getPackageName());
-            if (resId != 0) {
-                ivRoomDetail.setImageResource(resId);
+            // Lấy ảnh từ URL API tương tự RoomTypeAdapter
+            String imageUrl = roomType.getImageUrl();
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                // Thay thế localhost bằng 10.0.2.2 nếu đang chạy trên Emulator
+                if (imageUrl.contains("localhost")) {
+                    imageUrl = imageUrl.replace("localhost", "10.0.2.2");
+                }
+
+                Picasso.get()
+                        .load(imageUrl)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .error(android.R.drawable.ic_menu_report_image)
+                        .into(ivRoomDetail);
             } else {
-                // Ảnh mặc định hệ thống nếu không tìm thấy
+                // Ảnh mặc định hệ thống nếu không có URL
                 ivRoomDetail.setImageResource(android.R.drawable.ic_menu_gallery);
             }
 

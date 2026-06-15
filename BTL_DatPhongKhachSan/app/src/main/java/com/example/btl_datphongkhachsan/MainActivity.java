@@ -103,13 +103,14 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Chào mừng " + account.getFullName(), Toast.LENGTH_SHORT).show();
 
                         Intent intent;
-                        // Kiểm tra Role để điều hướng
-                        if ("RECEPTIONIST".equalsIgnoreCase(role)) {
-                            // Nhân viên lễ tân vào trang Dashboard (thông qua R_Navigation)
-                            intent = new Intent(MainActivity.this, R_Navigation.class);
-                        } else {
+                        if ("CUSTOMER".equalsIgnoreCase(role)) {
                             // Khách hàng vào trang HomeActivity
                             intent = new Intent(MainActivity.this, HomeActivity.class);
+                        }
+                        // Kiểm tra Role để điều hướng
+                        else {
+                            // Nhân viên lễ tân vào trang Dashboard (thông qua R_Navigation)
+                            intent = new Intent(MainActivity.this, R_Navigation.class);
                         }
                         startActivity(intent);
                         finish();

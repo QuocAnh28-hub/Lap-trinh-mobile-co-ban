@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import com.example.btl_datphongkhachsan.api.RetrofitClient;
 import com.example.btl_datphongkhachsan.models.CustomerInfo;
@@ -34,9 +35,22 @@ public class ProfileFragment extends Fragment {
         View cardLogout = view.findViewById(R.id.cardLogout);
         if (cardLogout != null) {
             cardLogout.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Xác nhận đăng xuất")
+                        .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
+                        .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                            // Xóa thông tin đăng nhập
+                            SharedPreferences sharedPref = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.clear();
+                            editor.apply();
+
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
             });
         }
 

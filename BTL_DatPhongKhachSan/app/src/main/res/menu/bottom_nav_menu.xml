@@ -9,14 +9,6 @@
         android:icon="@drawable/outline_book_2_24"
         android:title="Booking" />
     <item
-        android:id="@+id/nav_rooms"
-        android:icon="@drawable/outline_apartment_24"
-        android:title="Rooms" />
-    <item
-        android:id="@+id/nav_schedule"
-        android:icon="@drawable/outline_calendar_meal_24"
-        android:title="Schedule" />
-    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/outline_article_person_24"
         android:title="Profile" />

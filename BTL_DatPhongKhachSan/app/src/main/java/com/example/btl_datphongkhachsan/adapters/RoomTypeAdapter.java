@@ -1,6 +1,5 @@
 package com.example.btl_datphongkhachsan.adapters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.btl_datphongkhachsan.R;
 import com.example.btl_datphongkhachsan.RoomDetailsActivity;
 import com.example.btl_datphongkhachsan.models.RoomType;
+import com.squareup.picasso.Picasso;
+
+import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,14 +51,20 @@ public class RoomTypeAdapter extends RecyclerView.Adapter<RoomTypeAdapter.ViewHo
         
         holder.tvPrice.setText(String.format(Locale.getDefault(), "%,.0f VNĐ", roomType.getDisplayPrice()) + " / đêm");
 
-        // Tự động gán ảnh: Chuyển tên về chữ thường và XÓA KHOẢNG TRẮNG (ví dụ: "Double 1" -> "double1")
-        String imageName = roomType.getName().toLowerCase().replace(" ", "");
-        int resId = holder.itemView.getContext().getResources().getIdentifier(imageName, "drawable", holder.itemView.getContext().getPackageName());
-        
-        if (resId != 0) {
-            holder.ivRoomImage.setImageResource(resId);
+        // Sử dụng Picasso để tải ảnh từ URL API (Đã thay thế Glide để đồng bộ với build.gradle.kts)
+        String imageUrl = roomType.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Thay thế localhost bằng 10.0.2.2 nếu đang chạy trên Emulator
+            if (imageUrl.contains("localhost")) {
+                imageUrl = imageUrl.replace("localhost", "10.0.2.2");
+            }
+
+            Picasso.get()
+                    .load(imageUrl)
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .error(android.R.drawable.ic_menu_report_image)
+                    .into(holder.ivRoomImage);
         } else {
-            // Nếu không tìm thấy ảnh, sử dụng icon mặc định của hệ thống Android
             holder.ivRoomImage.setImageResource(android.R.drawable.ic_menu_gallery);
         }
         

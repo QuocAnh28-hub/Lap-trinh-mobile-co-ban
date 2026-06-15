@@ -15,6 +15,7 @@ import com.example.btl_datphongkhachsan.BookingDetailActivity;
 import com.example.btl_datphongkhachsan.R;
 import com.example.btl_datphongkhachsan.api.RetrofitClient;
 import com.example.btl_datphongkhachsan.models.Reservation;
+import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Locale;
 import retrofit2.Call;
@@ -55,15 +56,32 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         holder.tvBookingCheckIn.setText(formatDate(res.getCheckIn()));
         holder.tvBookingCheckOut.setText(formatDate(res.getCheckOut()));
 
-        // Tự động gán ảnh dựa trên tên loại phòng
-        if (res.getRoomType() != null) {
-            String imageName = res.getRoomType().toLowerCase()
-                    .replace(" room", "")
-                    .replace(" ", "");
-            
-            int resId = holder.itemView.getContext().getResources().getIdentifier(imageName, "drawable", holder.itemView.getContext().getPackageName());
-            if (resId != 0) {
-                holder.ivBookingRoom.setImageResource(resId);
+        // Sử dụng Picasso để tải ảnh từ URL API (tương tự RoomTypeAdapter)
+        String imageUrl = res.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Thay thế localhost bằng 10.0.2.2 nếu đang chạy trên Emulator
+            if (imageUrl.contains("localhost")) {
+                imageUrl = imageUrl.replace("localhost", "10.0.2.2");
+            }
+
+            Picasso.get()
+                    .load(imageUrl)
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .error(android.R.drawable.ic_menu_report_image)
+                    .into(holder.ivBookingRoom);
+        } else {
+            // Fallback: Tự động gán ảnh dựa trên tên loại phòng nếu không có URL từ API
+            if (res.getRoomType() != null) {
+                String imageName = res.getRoomType().toLowerCase()
+                        .replace(" room", "")
+                        .replace(" ", "");
+                
+                int resId = holder.itemView.getContext().getResources().getIdentifier(imageName, "drawable", holder.itemView.getContext().getPackageName());
+                if (resId != 0) {
+                    holder.ivBookingRoom.setImageResource(resId);
+                } else {
+                    holder.ivBookingRoom.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
             } else {
                 holder.ivBookingRoom.setImageResource(android.R.drawable.ic_menu_gallery);
             }

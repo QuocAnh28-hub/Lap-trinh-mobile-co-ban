@@ -12,6 +12,7 @@ public class Reservation implements Serializable {
     private int RoomTypeID;
     private int Quantity;
     private double TotalAmount;
+    private String ImageUrl; // Thêm trường này
 
     public int getStayID() { return StayID; }
     public void setStayID(int stayID) { StayID = stayID; }
@@ -39,4 +40,7 @@ public class Reservation implements Serializable {
 
     public double getTotalAmount() { return TotalAmount; }
     public void setTotalAmount(double totalAmount) { TotalAmount = totalAmount; }
+
+    public String getImageUrl() { return ImageUrl; }
+    public void setImageUrl(String imageUrl) { ImageUrl = imageUrl; }
 }

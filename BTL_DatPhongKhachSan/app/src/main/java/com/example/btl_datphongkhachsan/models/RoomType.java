@@ -34,6 +34,9 @@ public class RoomType implements Serializable {
     @SerializedName("AvailableRooms")
     private int AvailableRooms;
 
+    @SerializedName("ImageUrl")
+    private String ImageUrl;
+
     public int getRoomTypeID() { return RoomTypeID; }
     public String getName() { return Name; }
     public String getDescription() { return Description; }
@@ -47,4 +50,5 @@ public class RoomType implements Serializable {
     public double getPrice() { return Price; }
     public int getTotalRooms() { return TotalRooms; }
     public int getAvailableRooms() { return AvailableRooms; }
+    public String getImageUrl() { return ImageUrl; }
 }
