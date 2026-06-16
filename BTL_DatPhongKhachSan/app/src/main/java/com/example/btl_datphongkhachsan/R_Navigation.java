@@ -13,6 +13,7 @@ public class R_Navigation extends AppCompatActivity {
     private final Fragment profileFragment = new R_ProfileFragment();
     private final Fragment roomsFragment = new R_RoomStatusFragment();
     private final Fragment invoiceFragment = new R_InvoiceFragment();
+    private final Fragment stayingFragment = new R_StayingFragment();
     
     private final FragmentManager fm = getSupportFragmentManager();
     private Fragment active = dashBoardFragment;
@@ -25,6 +26,7 @@ public class R_Navigation extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
 
         // Khởi tạo các Fragment và ẩn chúng đi, chỉ hiện dashBoardFragment mặc định
+        fm.beginTransaction().add(R.id.fragment_container, stayingFragment, "booking").hide(stayingFragment).commit();
         fm.beginTransaction().add(R.id.fragment_container, invoiceFragment, "invoice").hide(invoiceFragment).commit();
         fm.beginTransaction().add(R.id.fragment_container, roomsFragment, "rooms").hide(roomsFragment).commit();
         fm.beginTransaction().add(R.id.fragment_container, profileFragment, "profile").hide(profileFragment).commit();
@@ -47,6 +49,11 @@ public class R_Navigation extends AppCompatActivity {
             } else if (itemId == R.id.nav_invoice) {
                 fm.beginTransaction().hide(active).show(invoiceFragment).commit();
                 active = invoiceFragment;
+                return true;
+            }
+            else if (itemId == R.id.nav_bookings) {
+                fm.beginTransaction().hide(active).show(stayingFragment).commit();
+                active = stayingFragment;
                 return true;
             }
             return false;

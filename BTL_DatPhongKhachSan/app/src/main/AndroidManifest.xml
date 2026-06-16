@@ -15,6 +15,12 @@
         android:theme="@style/Theme.BTL_DatPhongKhachSan"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".R_Waiting"
+            android:exported="false" />
+        <activity
+            android:name=".R_Staying"
+            android:exported="false" />
+        <activity
             android:name=".R_Invoice"
             android:exported="false" />
         <activity

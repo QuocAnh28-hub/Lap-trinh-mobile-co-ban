@@ -11,17 +11,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class R_InvoiceFragment extends Fragment {
+public class R_StayingFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.r_invoice, container, false);
+        View view = inflater.inflate(R.layout.r_staying, container, false);
 
-        RecyclerView rvInvoice = view.findViewById(R.id.rvInvoiceHistory);
-        if (rvInvoice != null) {
-            rvInvoice.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView rvStayinh = view.findViewById(R.id.rvStayingList);
+        if (rvStayinh != null) {
+            rvStayinh.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
         return view;
