@@ -6,33 +6,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class R_StayingFragment extends Fragment {
+public class R_WaitingFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.r_staying, container, false);
+        View view = inflater.inflate(R.layout.r_waiting, container, false);
 
-        // Sửa lỗi typo rvStayinh -> rvStaying
-        RecyclerView rvStaying = view.findViewById(R.id.rvStayingList);
-        if (rvStaying != null) {
-            rvStaying.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView rvWaiting = view.findViewById(R.id.rvWaitingList);
+        if (rvWaiting != null) {
+            rvWaiting.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        // Tìm tab "Chờ nhận phòng" để thực hiện chuyển đổi
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) 
-        TextView tabWaiting = view.findViewById(R.id.tabWaiting);
-        if (tabWaiting != null) {
-            tabWaiting.setOnClickListener(v -> {
+        // Xử lý sự kiện click vào Tab "Đang lưu trú" để quay lại
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
+        TextView tabStaying = view.findViewById(R.id.tabStaying);
+        if (tabStaying != null) {
+            tabStaying.setOnClickListener(v -> {
                 if (getActivity() instanceof R_Navigation) {
-                    ((R_Navigation) getActivity()).switchBookingTab(new R_WaitingFragment());
+                    ((R_Navigation) getActivity()).switchBookingTab(new R_StayingFragment());
                 }
             });
         }

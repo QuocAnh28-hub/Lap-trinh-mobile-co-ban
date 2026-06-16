@@ -14,6 +14,7 @@ public class R_Navigation extends AppCompatActivity {
     private final Fragment roomsFragment = new R_RoomStatusFragment();
     private final Fragment invoiceFragment = new R_InvoiceFragment();
     private final Fragment stayingFragment = new R_StayingFragment();
+    private final Fragment waitingFragment = new R_WaitingFragment();
     
     private final FragmentManager fm = getSupportFragmentManager();
     private Fragment active = dashBoardFragment;
@@ -25,7 +26,8 @@ public class R_Navigation extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
 
-        // Khởi tạo các Fragment và ẩn chúng đi, chỉ hiện dashBoardFragment mặc định
+        // Khởi tạo các Fragment và ẩn chúng đi
+        fm.beginTransaction().add(R.id.fragment_container, waitingFragment, "waiting").hide(waitingFragment).commit();
         fm.beginTransaction().add(R.id.fragment_container, stayingFragment, "booking").hide(stayingFragment).commit();
         fm.beginTransaction().add(R.id.fragment_container, invoiceFragment, "invoice").hide(invoiceFragment).commit();
         fm.beginTransaction().add(R.id.fragment_container, roomsFragment, "rooms").hide(roomsFragment).commit();
@@ -52,11 +54,30 @@ public class R_Navigation extends AppCompatActivity {
                 return true;
             }
             else if (itemId == R.id.nav_bookings) {
+                // Khi nhấn vào menu Booking, mặc định hiển thị StayingFragment
                 fm.beginTransaction().hide(active).show(stayingFragment).commit();
                 active = stayingFragment;
                 return true;
             }
             return false;
         });
+    }
+
+    /**
+     * Chuyển đổi giữa các tab Booking (Staying và Waiting)
+     * @param fragment Fragment mục tiêu (thường là new R_WaitingFragment() hoặc new R_StayingFragment())
+     */
+    public void switchBookingTab(Fragment fragment) {
+        Fragment target = null;
+        if (fragment instanceof R_WaitingFragment) {
+            target = waitingFragment;
+        } else if (fragment instanceof R_StayingFragment) {
+            target = stayingFragment;
+        }
+
+        if (target != null && active != target) {
+            fm.beginTransaction().hide(active).show(target).commit();
+            active = target;
+        }
     }
 }
