@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashBoardFragment extends Fragment {
+public class R_DashBoardFragment extends Fragment {
 
     private TextView tvTotalRooms, tvRoomSummary, tvOccupancyRate, tvCheckInOut, tvMonthlyRevenue;
     private TextView tvAvailableStatusCount, tvOccupiedStatusCount, tvDirtyStatusCount;

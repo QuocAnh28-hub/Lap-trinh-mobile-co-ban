@@ -1,6 +1,5 @@
 package com.example.btl_datphongkhachsan;
 
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,7 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class R_Navigation extends AppCompatActivity {
 
-    private final Fragment dashBoardFragment = new DashBoardFragment();
+    private final Fragment dashBoardFragment = new R_DashBoardFragment();
     private final Fragment profileFragment = new R_ProfileFragment();
     private final Fragment roomsFragment = new R_RoomStatusFragment();
     private final Fragment invoiceFragment = new R_InvoiceFragment();
