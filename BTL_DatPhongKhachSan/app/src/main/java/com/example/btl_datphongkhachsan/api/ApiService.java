@@ -5,12 +5,17 @@ import com.example.btl_datphongkhachsan.models.BookingResponse;
 import com.example.btl_datphongkhachsan.models.CustomerInfo;
 import com.example.btl_datphongkhachsan.models.LoginRequest;
 import com.example.btl_datphongkhachsan.models.LoginResponse;
+import com.example.btl_datphongkhachsan.models.OccupancyRateResponse;
 import com.example.btl_datphongkhachsan.models.RegisterRequest;
 import com.example.btl_datphongkhachsan.models.RegisterResponse;
 import com.example.btl_datphongkhachsan.models.Reservation;
 import com.example.btl_datphongkhachsan.models.ReservationModifyRequest;
+import com.example.btl_datphongkhachsan.models.RevenueThisMonthResponse;
+import com.example.btl_datphongkhachsan.models.RoomStatisticsResponse;
+import com.example.btl_datphongkhachsan.models.RoomStatusSummaryResponse;
 import com.example.btl_datphongkhachsan.models.RoomType;
 import com.example.btl_datphongkhachsan.models.SearchAvailableRequest;
+import com.example.btl_datphongkhachsan.models.TodayCheckInOutResponse;
 
 import java.util.List;
 
@@ -55,4 +60,20 @@ public interface ApiService {
 
     @PUT("api/reservations/{reservationId}")
     Call<Void> modifyReservation(@Path("reservationId") int reservationId, @Body ReservationModifyRequest request);
+
+    // Dashboard APIs
+    @GET("api/overview/room-statistics")
+    Call<RoomStatisticsResponse> getRoomStatistics();
+
+    @GET("api/overview/occupancy-rate")
+    Call<OccupancyRateResponse> getOccupancyRate();
+
+    @GET("api/overview/room-status-summary")
+    Call<RoomStatusSummaryResponse> getRoomStatusSummary();
+
+    @GET("api/overview/today-checkin-checkout")
+    Call<TodayCheckInOutResponse> getTodayCheckInOut();
+
+    @GET("api/overview/revenue-this-month")
+    Call<RevenueThisMonthResponse> getRevenueThisMonth();
 }
