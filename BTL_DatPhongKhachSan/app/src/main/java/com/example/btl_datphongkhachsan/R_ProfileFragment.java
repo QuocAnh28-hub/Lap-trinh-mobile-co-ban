@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ public class R_ProfileFragment extends Fragment {
         TextView tvProfileName = view.findViewById(R.id.tvProfileName);
         TextView tvProfileTitle = view.findViewById(R.id.tvProfileTitle);
         View btnLogout = view.findViewById(R.id.btnLogout);
+        View btnEditProfile = view.findViewById(R.id.btnEditProfile);
+        View btnChangePassword = view.findViewById(R.id.btnChangePassword);
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String fullName = sharedPref.getString("FullName", "User");
@@ -29,6 +32,22 @@ public class R_ProfileFragment extends Fragment {
 
         if (tvProfileName != null) tvProfileName.setText(fullName);
         if (tvProfileTitle != null && !role.isEmpty()) tvProfileTitle.setText(role.toUpperCase());
+
+        // Chuyển đến trang cập nhật thông tin
+        if (btnEditProfile != null) {
+            btnEditProfile.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), R_ChangeProfile.class);
+                startActivity(intent);
+            });
+        }
+
+        // Chuyển đến trang đổi mật khẩu
+        if (btnChangePassword != null) {
+            btnChangePassword.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), R_ChangePass.class);
+                startActivity(intent);
+            });
+        }
 
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {

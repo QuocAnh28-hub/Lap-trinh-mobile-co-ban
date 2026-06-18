@@ -2,6 +2,7 @@ package com.example.btl_datphongkhachsan.api;
 
 import com.example.btl_datphongkhachsan.models.BookingRequest;
 import com.example.btl_datphongkhachsan.models.BookingResponse;
+import com.example.btl_datphongkhachsan.models.ChangePasswordRequest;
 import com.example.btl_datphongkhachsan.models.CustomerInfo;
 import com.example.btl_datphongkhachsan.models.LoginRequest;
 import com.example.btl_datphongkhachsan.models.LoginResponse;
@@ -60,6 +61,12 @@ public interface ApiService {
 
     @PUT("api/reservations/{reservationId}")
     Call<Void> modifyReservation(@Path("reservationId") int reservationId, @Body ReservationModifyRequest request);
+
+    @PUT("api/pages-for-customer/user/{userId}/password")
+    Call<Void> changePassword(@Path("userId") String userId, @Body ChangePasswordRequest request);
+
+    @PUT("api/pages-for-customer/user/{userId}")
+    Call<Void> updateProfile(@Path("userId") String userId, @Body CustomerInfo info);
 
     // Dashboard APIs
     @GET("api/overview/room-statistics")

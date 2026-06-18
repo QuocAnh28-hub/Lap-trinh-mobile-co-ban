@@ -97,13 +97,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/edit_text_bg"
-            android:hint="customer1@gmail.com"
+            android:text="nhanvien121@gmail.com"
             android:inputType="textEmailAddress"
             android:paddingHorizontal="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvEmailLabel" />
-
+<!--        android:hint="customer1@gmail.com"-->
         <!-- Password Section -->
         <TextView
             android:id="@+id/tvPasswordLabel"
@@ -137,13 +137,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/edit_text_bg"
-            android:hint="123456"
+            android:text="123"
             android:inputType="textPassword"
             android:paddingHorizontal="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvPasswordLabel" />
-
+<!--        android:hint="123456"-->
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="0dp"
