@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="8dp"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phòng 103"
+            android:textColor="#1A2B48"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvItemType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ROOM"
+            android:textColor="#8E99AB"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvItemQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:text="x2"
+        android:textColor="#1A2B48" />
+
+    <TextView
+        android:id="@+id/tvItemAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.600.000 đ"
+        android:textColor="#1A2B48"
+        android:textStyle="bold" />
+</LinearLayout>

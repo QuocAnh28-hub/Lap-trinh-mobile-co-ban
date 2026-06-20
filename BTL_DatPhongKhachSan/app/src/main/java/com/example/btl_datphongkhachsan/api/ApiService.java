@@ -3,10 +3,17 @@ package com.example.btl_datphongkhachsan.api;
 import com.example.btl_datphongkhachsan.models.BookingRequest;
 import com.example.btl_datphongkhachsan.models.BookingResponse;
 import com.example.btl_datphongkhachsan.models.ChangePasswordRequest;
+import com.example.btl_datphongkhachsan.models.CreateInvoiceRequest;
+import com.example.btl_datphongkhachsan.models.CreateInvoiceResponse;
 import com.example.btl_datphongkhachsan.models.CustomerInfo;
+import com.example.btl_datphongkhachsan.models.InvoiceFullResponse;
+import com.example.btl_datphongkhachsan.models.InvoiceHistory;
 import com.example.btl_datphongkhachsan.models.LoginRequest;
 import com.example.btl_datphongkhachsan.models.LoginResponse;
+import com.example.btl_datphongkhachsan.models.MinibarUsage;
 import com.example.btl_datphongkhachsan.models.OccupancyRateResponse;
+import com.example.btl_datphongkhachsan.models.PenaltyUsage;
+import com.example.btl_datphongkhachsan.models.PendingInvoice;
 import com.example.btl_datphongkhachsan.models.RegisterRequest;
 import com.example.btl_datphongkhachsan.models.RegisterResponse;
 import com.example.btl_datphongkhachsan.models.Reservation;
@@ -14,8 +21,10 @@ import com.example.btl_datphongkhachsan.models.ReservationModifyRequest;
 import com.example.btl_datphongkhachsan.models.RevenueThisMonthResponse;
 import com.example.btl_datphongkhachsan.models.RoomStatisticsResponse;
 import com.example.btl_datphongkhachsan.models.RoomStatusSummaryResponse;
+import com.example.btl_datphongkhachsan.models.RoomStayHistory;
 import com.example.btl_datphongkhachsan.models.RoomType;
 import com.example.btl_datphongkhachsan.models.SearchAvailableRequest;
+import com.example.btl_datphongkhachsan.models.ServiceUsage;
 import com.example.btl_datphongkhachsan.models.TodayCheckInOutResponse;
 
 import java.util.List;
@@ -83,4 +92,30 @@ public interface ApiService {
 
     @GET("api/overview/revenue-this-month")
     Call<RevenueThisMonthResponse> getRevenueThisMonth();
+
+    // Invoice APIs
+    @GET("api/invoices/pending")
+    Call<List<PendingInvoice>> getPendingInvoices();
+
+    @GET("api/invoices/history")
+    Call<List<InvoiceHistory>> getInvoiceHistory();
+
+    @GET("api/invoices/stays/{stayId}/full")
+    Call<InvoiceFullResponse> getFullInvoiceDetail(@Path("stayId") int stayId);
+
+    @POST("api/invoices/create-and-pay")
+    Call<CreateInvoiceResponse> createAndPayInvoice(@Body CreateInvoiceRequest request);
+
+    // Checkout/Payment APIs
+    @GET("api/reservations/stays/{stayId}/room-stay-history-checkedout")
+    Call<List<RoomStayHistory>> getRoomStayHistory(@Path("stayId") int stayId);
+
+    @GET("api/reservations/stays/{stayId}/service-usages")
+    Call<List<ServiceUsage>> getServiceUsages(@Path("stayId") int stayId);
+
+    @GET("api/reservations/stays/{stayId}/minibar-usages")
+    Call<List<MinibarUsage>> getMinibarUsages(@Path("stayId") int stayId);
+
+    @GET("api/reservations/stays/{stayId}/penalties")
+    Call<List<PenaltyUsage>> getPenalties(@Path("stayId") int stayId);
 }

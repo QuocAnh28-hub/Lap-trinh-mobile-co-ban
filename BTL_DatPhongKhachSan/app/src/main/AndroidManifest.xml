@@ -15,6 +15,12 @@
         android:theme="@style/Theme.BTL_DatPhongKhachSan"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".R_InvoiceDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".R_Payment"
+            android:exported="false" />
+        <activity
             android:name=".R_ChangePass"
             android:exported="false" />
         <activity

@@ -77,7 +77,8 @@
                 android:background="@drawable/social_button_bg"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:paddingHorizontal="16dp" />
+                android:paddingHorizontal="16dp"
+                android:enabled="false"/>
 
             <TextView
                 android:layout_width="wrap_content"
