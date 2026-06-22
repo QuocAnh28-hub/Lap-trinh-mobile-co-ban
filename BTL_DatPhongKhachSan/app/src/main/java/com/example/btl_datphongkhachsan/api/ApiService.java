@@ -19,6 +19,7 @@ import com.example.btl_datphongkhachsan.models.RegisterResponse;
 import com.example.btl_datphongkhachsan.models.Reservation;
 import com.example.btl_datphongkhachsan.models.ReservationModifyRequest;
 import com.example.btl_datphongkhachsan.models.RevenueThisMonthResponse;
+import com.example.btl_datphongkhachsan.models.Room;
 import com.example.btl_datphongkhachsan.models.RoomStatisticsResponse;
 import com.example.btl_datphongkhachsan.models.RoomStatusSummaryResponse;
 import com.example.btl_datphongkhachsan.models.RoomStayHistory;
@@ -28,6 +29,7 @@ import com.example.btl_datphongkhachsan.models.ServiceUsage;
 import com.example.btl_datphongkhachsan.models.TodayCheckInOutResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -118,4 +120,11 @@ public interface ApiService {
 
     @GET("api/reservations/stays/{stayId}/penalties")
     Call<List<PenaltyUsage>> getPenalties(@Path("stayId") int stayId);
+
+    // Room Status APIs
+    @GET("api/rooms")
+    Call<List<Room>> getAllRooms();
+
+    @POST("api/rooms/{roomId}/clean")
+    Call<Map<String, String>> cleanRoom(@Path("roomId") int roomId);
 }

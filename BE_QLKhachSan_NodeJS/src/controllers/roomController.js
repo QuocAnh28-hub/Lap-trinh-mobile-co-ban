@@ -189,10 +189,31 @@ const updateRoom = async (req, res) => {
   }
 };
 
+const cleanRoom = async (req, res) => {
+  console.log("cleanRoom called", req.params);
+  try {
+    const roomId = Number.parseInt(req.params.id, 10);
+
+    if (!Number.isInteger(roomId) || roomId <= 0) {
+      return res.status(400).json({ error: "RoomID không hợp lệ" });
+    }
+
+    const request = new sql.Request();
+    request.input("RoomID", sql.Int, roomId);
+    await request.execute("sp_CleanRoom");
+
+    return res.json({ message: "Dọn phòng thành công" });
+  } catch (err) {
+    console.error("cleanRoom Error:", err);
+    return res.status(500).json({ error: "Lỗi server", detail: err.message });
+  }
+};
+
 module.exports = {
   getRooms,
   getRoomCalendar,
   getAvailableRoomsAdvanced,
   addRoom,
   updateRoom,
+  cleanRoom,
 };
