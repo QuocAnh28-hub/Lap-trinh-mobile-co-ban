@@ -1,10 +1,13 @@
 package com.example.btl_datphongkhachsan;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,10 +34,12 @@ public class R_InvoiceFragment extends Fragment {
 
     private RecyclerView rvUnpaidRooms, rvInvoiceHistory;
     private TextView tvUnpaidCount;
+    private EditText etSearchInvoice;
     private UnpaidRoomAdapter unpaidAdapter;
     private InvoiceHistoryAdapter historyAdapter;
     private List<PendingInvoice> unpaidList = new ArrayList<>();
     private List<InvoiceHistory> historyList = new ArrayList<>();
+    private List<InvoiceHistory> fullHistoryList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -43,6 +48,7 @@ public class R_InvoiceFragment extends Fragment {
 
         initViews(view);
         setupRecyclerViews();
+        setupSearch();
 
         loadData();
 
@@ -53,6 +59,7 @@ public class R_InvoiceFragment extends Fragment {
         rvUnpaidRooms = view.findViewById(R.id.rvUnpaidRooms);
         rvInvoiceHistory = view.findViewById(R.id.rvInvoiceHistory);
         tvUnpaidCount = view.findViewById(R.id.tvUnpaidCount);
+        etSearchInvoice = view.findViewById(R.id.etSearchInvoice);
     }
 
     private void setupRecyclerViews() {
@@ -65,6 +72,39 @@ public class R_InvoiceFragment extends Fragment {
         rvInvoiceHistory.setLayoutManager(new LinearLayoutManager(getContext()));
         historyAdapter = new InvoiceHistoryAdapter(historyList);
         rvInvoiceHistory.setAdapter(historyAdapter);
+    }
+
+    private void setupSearch() {
+        if (etSearchInvoice != null) {
+            etSearchInvoice.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    filterHistory(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+        }
+    }
+
+    private void filterHistory(String query) {
+        historyList.clear();
+        if (query.isEmpty()) {
+            historyList.addAll(fullHistoryList);
+        } else {
+            String lowerCaseQuery = query.toLowerCase().trim();
+            for (InvoiceHistory item : fullHistoryList) {
+                if (item.getFullName().toLowerCase().contains(lowerCaseQuery) ||
+                    String.valueOf(item.getStayID()).contains(lowerCaseQuery)) {
+                    historyList.add(item);
+                }
+            }
+        }
+        historyAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -106,9 +146,11 @@ public class R_InvoiceFragment extends Fragment {
             @Override
             public void onResponse(Call<List<InvoiceHistory>> call, Response<List<InvoiceHistory>> response) {
                 if (isAdded() && response.isSuccessful() && response.body() != null) {
-                    historyList.clear();
-                    historyList.addAll(response.body());
-                    historyAdapter.notifyDataSetChanged();
+                    fullHistoryList.clear();
+                    fullHistoryList.addAll(response.body());
+                    
+                    // Maintain current filter if any
+                    filterHistory(etSearchInvoice.getText().toString());
                 }
             }
 

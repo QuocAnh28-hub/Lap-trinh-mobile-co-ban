@@ -124,6 +124,7 @@
                     app:tint="#888888" />
 
                 <EditText
+                    android:id="@+id/etSearchInvoice"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
