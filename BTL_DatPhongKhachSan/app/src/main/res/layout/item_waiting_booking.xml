@@ -31,18 +31,6 @@
                     android:textColor="@color/black"
                     android:textSize="17sp"
                     android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/tvBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:background="#D1E3FF"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
-                    android:text="MỚI"
-                    android:textColor="#0D47A1"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
             </RelativeLayout>
             <TextView
                 android:id="@+id/tvRoomInfo"

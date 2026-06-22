@@ -26,7 +26,9 @@ import com.example.btl_datphongkhachsan.models.RoomStayHistory;
 import com.example.btl_datphongkhachsan.models.RoomType;
 import com.example.btl_datphongkhachsan.models.SearchAvailableRequest;
 import com.example.btl_datphongkhachsan.models.ServiceUsage;
+import com.example.btl_datphongkhachsan.models.StayingCustomer;
 import com.example.btl_datphongkhachsan.models.TodayCheckInOutResponse;
+import com.example.btl_datphongkhachsan.models.WaitingCustomer;
 
 import java.util.List;
 import java.util.Map;
@@ -127,4 +129,12 @@ public interface ApiService {
 
     @POST("api/rooms/{roomId}/clean")
     Call<Map<String, String>> cleanRoom(@Path("roomId") int roomId);
+
+    // Staying Customers
+    @GET("api/reservations/current-staying-customers")
+    Call<List<StayingCustomer>> getCurrentStayingCustomers();
+
+    // Waiting Check-in Customers
+    @GET("api/reservations/waiting-checkin-customers")
+    Call<List<WaitingCustomer>> getWaitingCheckinCustomers();
 }

@@ -62,7 +62,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_tab_selected"
             android:gravity="center"
-            android:text="Đang lưu trú (1)"
+            android:text="Đang lưu trú"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="13sp" />
@@ -73,7 +73,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Đặt phòng chờ nhận\n(3)"
+            android:text="Đặt phòng chờ nhận"
             android:textColor="#666666"
             android:textSize="13sp" />
     </LinearLayout>
