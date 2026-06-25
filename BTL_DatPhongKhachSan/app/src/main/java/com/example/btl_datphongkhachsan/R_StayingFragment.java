@@ -1,11 +1,13 @@
 package com.example.btl_datphongkhachsan;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,11 +41,20 @@ public class R_StayingFragment extends Fragment {
 
         rvStaying = view.findViewById(R.id.rvStayingList);
         tabStaying = view.findViewById(R.id.tabStaying);
+        View btnAdd = view.findViewById(R.id.fabAdd);
         
         if (rvStaying != null) {
             rvStaying.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new StayingCustomerAdapter(customerList);
             rvStaying.setAdapter(adapter);
+        }
+
+        // Chuyển đến trang checkinwalkin
+        if (btnAdd != null) {
+            btnAdd.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), R_CheckinWalkin.class);
+                startActivity(intent);
+            });
         }
 
         // Tìm tab "Chờ nhận phòng" để thực hiện chuyển đổi

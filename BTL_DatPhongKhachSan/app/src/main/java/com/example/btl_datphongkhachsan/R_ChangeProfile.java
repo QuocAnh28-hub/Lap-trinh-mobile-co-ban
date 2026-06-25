@@ -31,9 +31,15 @@ public class R_ChangeProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.r_changeprofile);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        View mainView = findViewById(R.id.main);
+        int pLeft = mainView.getPaddingLeft();
+        int pTop = mainView.getPaddingTop();
+        int pRight = mainView.getPaddingRight();
+        int pBottom = mainView.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left + pLeft, systemBars.top + pTop, systemBars.right + pRight, systemBars.bottom + pBottom);
             return insets;
         });
 

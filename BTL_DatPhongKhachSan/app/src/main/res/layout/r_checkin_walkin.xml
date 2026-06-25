@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="24dp"
+    tools:context=".R_CheckinWalkin">
+
+    <!-- Header: Title and Close button -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check-in Walk-in"
+        android:textColor="#1A1C1E"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Họ tên Field -->
+    <TextView
+        android:id="@+id/labelFullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Họ tên *"
+        android:textColor="#1A1C1E"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader" />
+
+    <EditText
+        android:id="@+id/etFullName"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_field_edittext"
+        android:hint="Họ tên *"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="16dp"
+        android:textColor="#1A1C1E"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/labelFullName" />
+
+    <!-- CMND/CCCD Field -->
+    <TextView
+        android:id="@+id/labelIdCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="CMND/CCCD *"
+        android:textColor="#1A1C1E"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etFullName" />
+
+    <EditText
+        android:id="@+id/etIdCard"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_field_edittext"
+        android:hint="CMND/CCCD *"
+        android:inputType="number"
+        android:paddingHorizontal="16dp"
+        android:textColor="#1A1C1E"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/labelIdCard" />
+
+    <!-- Chọn phòng Field -->
+    <TextView
+        android:id="@+id/labelSelectRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Chọn phòng *"
+        android:textColor="#1A1C1E"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etIdCard" />
+
+    <Spinner
+        android:id="@+id/spinnerRoom"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_field_edittext"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/labelSelectRoom" />
+
+    <TextView
+        android:id="@+id/tvHelperText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Vui lòng chọn ngày trả phòng dự kiến để tải phòng trống."
+        android:textColor="#74777F"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@id/spinnerRoom" />
+
+    <!-- Ngày trả phòng dự kiến Field -->
+    <TextView
+        android:id="@+id/labelCheckoutDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Ngày trả phòng dự kiến *"
+        android:textColor="#1A1C1E"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHelperText" />
+
+    <RelativeLayout
+        android:id="@+id/layoutCheckoutDate"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_field_edittext"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/labelCheckoutDate">
+
+        <EditText
+            android:id="@+id/etCheckoutDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@id/ivCalendar"
+            android:background="@android:color/transparent"
+            android:focusable="false"
+            android:hint="mm / dd / yyyy"
+            android:inputType="none"
+            android:textColor="#1A1C1E"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/ivCalendar"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/outline_book_2_24"
+            app:tint="#74777F" />
+    </RelativeLayout>
+
+    <!-- Bottom Buttons -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutCheckoutDate">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="12dp"
+            android:text="Quay lại"
+            android:textAllCaps="false"
+            android:textColor="#1A1C1E"
+            app:backgroundTint="#F2F2F2"
+            app:cornerRadius="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCheckIn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:backgroundTint="#0061A4"
+            android:text="Check-in"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
