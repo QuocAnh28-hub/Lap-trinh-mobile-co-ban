@@ -77,6 +77,26 @@
         <activity
             android:name=".BookingDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".R_CheckOut"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".R_CheckIn_Booking"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".R_ChangeRoom"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".R_ExtendRoom"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".R_CallService"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

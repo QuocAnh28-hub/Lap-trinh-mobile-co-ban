@@ -1,5 +1,6 @@
 package com.example.btl_datphongkhachsan.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_datphongkhachsan.R;
+import com.example.btl_datphongkhachsan.R_CheckIn_Booking;
 import com.example.btl_datphongkhachsan.models.WaitingCustomer;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
@@ -35,6 +38,14 @@ public class WaitingCustomerAdapter extends RecyclerView.Adapter<WaitingCustomer
         holder.tvRoomInfo.setText("🏨 " + customer.getName());
         holder.tvCheckIn.setText(formatDate(customer.getCheckInDate()));
         holder.tvCheckOut.setText(formatDate(customer.getCheckOutDate()));
+
+        holder.btnCheckIn.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), R_CheckIn_Booking.class);
+            intent.putExtra("CUSTOMER_NAME", customer.getFullName());
+            intent.putExtra("ROOM_TYPE", customer.getName());
+            intent.putExtra("RESERVATION_ID", customer.getReservationID());
+            v.getContext().startActivity(intent);
+        });
     }
 
     private String formatDate(String dateStr) {
@@ -56,6 +67,7 @@ public class WaitingCustomerAdapter extends RecyclerView.Adapter<WaitingCustomer
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCustomerName, tvRoomInfo, tvCheckIn, tvCheckOut, tvBadge;
+        MaterialButton btnCheckIn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +75,7 @@ public class WaitingCustomerAdapter extends RecyclerView.Adapter<WaitingCustomer
             tvRoomInfo = itemView.findViewById(R.id.tvRoomInfo);
             tvCheckIn = itemView.findViewById(R.id.tvCheckIn);
             tvCheckOut = itemView.findViewById(R.id.tvCheckOut);
+            btnCheckIn = itemView.findViewById(R.id.btnCheckIn);
         }
     }
 }

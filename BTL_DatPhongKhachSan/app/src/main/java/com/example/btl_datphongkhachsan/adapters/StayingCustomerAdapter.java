@@ -10,6 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_datphongkhachsan.R;
+import com.example.btl_datphongkhachsan.R_CallService;
+import com.example.btl_datphongkhachsan.R_ChangeRoom;
+import com.example.btl_datphongkhachsan.R_CheckOut;
+import com.example.btl_datphongkhachsan.R_ExtendRoom;
 import com.example.btl_datphongkhachsan.R_Payment;
 import com.example.btl_datphongkhachsan.models.StayingCustomer;
 import com.google.android.material.button.MaterialButton;
@@ -42,9 +46,40 @@ public class StayingCustomerAdapter extends RecyclerView.Adapter<StayingCustomer
         
         holder.tvVipBadge.setVisibility(View.GONE);
 
+        // Xử lý nút Chuyển phòng
+        holder.btnChangeRoom.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), R_ChangeRoom.class);
+            intent.putExtra("STAY_ID", customer.getStayID());
+            intent.putExtra("CURRENT_ROOM", customer.getRoomNumber());
+            v.getContext().startActivity(intent);
+        });
+
+        // Xử lý nút Gia hạn
+        holder.btnExtend.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), R_ExtendRoom.class);
+            intent.putExtra("STAY_ID", customer.getStayID());
+            intent.putExtra("CUSTOMER_NAME", customer.getFullName());
+            intent.putExtra("ROOM_NUMBER", customer.getRoomNumber());
+            v.getContext().startActivity(intent);
+        });
+
+        // Xử lý nút Gọi dịch vụ
+        holder.btnService.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), R_CallService.class);
+            intent.putExtra("STAY_ID", customer.getStayID());
+            intent.putExtra("CUSTOMER_NAME", customer.getFullName());
+            intent.putExtra("ROOM_NUMBER", customer.getRoomNumber());
+            v.getContext().startActivity(intent);
+        });
+
         // Xử lý nút Check-out
         holder.btnCheckOut.setOnClickListener(v -> {
-
+            Intent intent = new Intent(v.getContext(), R_CheckOut.class);
+            // Truyền dữ liệu sang trang Check-out
+            intent.putExtra("STAY_ID", customer.getStayID());
+            intent.putExtra("CUSTOMER_NAME", customer.getFullName());
+            intent.putExtra("ROOM_NUMBER", customer.getRoomNumber());
+            v.getContext().startActivity(intent);
         });
     }
 
@@ -67,6 +102,7 @@ public class StayingCustomerAdapter extends RecyclerView.Adapter<StayingCustomer
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvGuestName, tvStatus, tvRoomInfo, tvCheckInTime, tvCheckOutTime, tvVipBadge;
         MaterialButton btnCheckOut;
+        View btnChangeRoom, btnExtend, btnService;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,6 +113,9 @@ public class StayingCustomerAdapter extends RecyclerView.Adapter<StayingCustomer
             tvCheckOutTime = itemView.findViewById(R.id.tvCheckOutTime);
             tvVipBadge = itemView.findViewById(R.id.tvVipBadge);
             btnCheckOut = itemView.findViewById(R.id.btnCheckOut);
+            btnChangeRoom = itemView.findViewById(R.id.btnChangeRoom);
+            btnExtend = itemView.findViewById(R.id.btnExtend);
+            btnService = itemView.findViewById(R.id.btnService);
         }
     }
 }

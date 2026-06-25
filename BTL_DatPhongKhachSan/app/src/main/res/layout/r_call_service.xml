@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="20dp"
+    tools:context=".R_CallService">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gọi dịch vụ"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="#D7D7D7"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <!-- Khách hàng -->
+    <TextView
+        android:id="@+id/tvLabelCustomer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Khách hàng"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <EditText
+        android:id="@+id/edtCustomerName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_edittext"
+        android:enabled="false"
+        android:paddingHorizontal="16dp"
+        android:text="ABC"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelCustomer" />
+
+    <!-- Phòng -->
+    <TextView
+        android:id="@+id/tvLabelRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Phòng"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtCustomerName" />
+
+    <EditText
+        android:id="@+id/edtRoomNumber"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_edittext"
+        android:enabled="false"
+        android:paddingHorizontal="16dp"
+        android:text="000"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelRoom" />
+
+    <!-- Dịch vụ sử dụng -->
+    <TextView
+        android:id="@+id/tvLabelService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Dịch vụ sử dụng"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtRoomNumber" />
+
+    <TextView
+        android:id="@+id/tvEmptyService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_empty_state"
+        android:padding="16dp"
+        android:text="Chưa có dịch vụ nào được ghi nhận."
+        android:textColor="#446699"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelService" />
+
+    <!-- Thêm dịch vụ Row -->
+    <LinearLayout
+        android:id="@+id/layoutAddService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tvEmptyService">
+
+        <Spinner
+            android:id="@+id/spnService"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/bg_edittext"
+            android:paddingHorizontal="12dp" />
+
+        <EditText
+            android:id="@+id/edtServiceQuantity"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_weight="0.6"
+            android:background="@drawable/bg_edittext"
+            android:hint="SL"
+            android:gravity="center"
+            android:inputType="number"
+            android:paddingHorizontal="12dp"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddService"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="0.7"
+            app:backgroundTint="#96C2EF"
+            android:text="Thêm"
+            android:textAllCaps="false"
+            app:cornerRadius="8dp"
+            app:strokeColor="#DEE2E6"
+            app:strokeWidth="1dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Bottom Actions Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvTotalService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Tổng dịch vụ:  0đ"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCloseActivity"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:text="Đóng"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:cornerRadius="8dp"
+            app:strokeColor="#DEE2E6" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
