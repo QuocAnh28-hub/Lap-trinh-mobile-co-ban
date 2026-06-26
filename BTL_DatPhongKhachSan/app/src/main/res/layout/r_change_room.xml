@@ -21,6 +21,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:tint="@color/black" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -77,33 +88,6 @@
         android:paddingHorizontal="12dp"
         app:layout_constraintTop_toBottomOf="@id/tvLabelNewRoom" />
 
-    <!-- Lý do chuyển phòng -->
-    <TextView
-        android:id="@+id/tvLabelReason"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Lý do chuyển phòng"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spnNewRoom" />
-
-    <EditText
-        android:id="@+id/edtReason"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_edittext"
-        android:gravity="top"
-        android:hint="VD: Khách yêu cầu, nâng hạng phòng, sự cố kỹ thuật..."
-        android:minLines="3"
-        android:padding="16dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelReason" />
-
     <!-- Note Box -->
     <TextView
         android:id="@+id/tvNote"
@@ -115,7 +99,7 @@
         android:text="Lưu ý: Tiền phòng sẽ được tính riêng theo từng phòng khách ở.\nPhòng cũ sẽ chuyển sang trạng thái 'Đang dọn dẹp'"
         android:textColor="#446699"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/edtReason" />
+        app:layout_constraintTop_toBottomOf="@+id/spnNewRoom" />
 
     <!-- Buttons -->
     <LinearLayout

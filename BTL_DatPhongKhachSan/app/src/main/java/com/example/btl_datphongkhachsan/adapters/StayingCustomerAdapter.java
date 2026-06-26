@@ -50,6 +50,7 @@ public class StayingCustomerAdapter extends RecyclerView.Adapter<StayingCustomer
         holder.btnChangeRoom.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), R_ChangeRoom.class);
             intent.putExtra("STAY_ID", customer.getStayID());
+            intent.putExtra("OLD_ROOM_ID", customer.getRoomID());
             intent.putExtra("CURRENT_ROOM", customer.getRoomNumber());
             v.getContext().startActivity(intent);
         });

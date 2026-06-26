@@ -19,4 +19,9 @@ public class Room {
     public String getDescription() { return Description; }
     public int getCapacity() { return Capacity; }
     public double getDefaultPrice() { return DefaultPrice; }
+
+    @Override
+    public String toString() {
+        return RoomNumber + " (" + RoomTypeName + ")";
+    }
 }

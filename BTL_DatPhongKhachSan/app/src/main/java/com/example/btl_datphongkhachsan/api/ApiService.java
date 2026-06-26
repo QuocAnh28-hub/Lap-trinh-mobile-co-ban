@@ -1,6 +1,8 @@
 package com.example.btl_datphongkhachsan.api;
 
+import com.example.btl_datphongkhachsan.models.AvailableRoom;
 import com.example.btl_datphongkhachsan.models.BookingRequest;
+import com.example.btl_datphongkhachsan.models.CheckInRequest;
 import com.example.btl_datphongkhachsan.models.BookingResponse;
 import com.example.btl_datphongkhachsan.models.ChangePasswordRequest;
 import com.example.btl_datphongkhachsan.models.CreateInvoiceRequest;
@@ -28,6 +30,7 @@ import com.example.btl_datphongkhachsan.models.SearchAvailableRequest;
 import com.example.btl_datphongkhachsan.models.ServiceUsage;
 import com.example.btl_datphongkhachsan.models.StayingCustomer;
 import com.example.btl_datphongkhachsan.models.TodayCheckInOutResponse;
+import com.example.btl_datphongkhachsan.models.TransferRoomRequest;
 import com.example.btl_datphongkhachsan.models.WaitingCustomer;
 
 import java.util.List;
@@ -137,4 +140,13 @@ public interface ApiService {
     // Waiting Check-in Customers
     @GET("api/reservations/waiting-checkin-customers")
     Call<List<WaitingCustomer>> getWaitingCheckinCustomers();
+
+    @GET("api/reservations/{reservationId}/available-rooms-for-checkin")
+    Call<List<AvailableRoom>> getAvailableRoomsForCheckIn(@Path("reservationId") int reservationId);
+
+    @POST("api/reservations/checkin/by-reservation")
+    Call<Map<String, String>> checkInByReservation(@Body CheckInRequest request);
+
+    @POST("api/reservations/transfer-room")
+    Call<Map<String, String>> transferRoom(@Body TransferRoomRequest request);
 }
