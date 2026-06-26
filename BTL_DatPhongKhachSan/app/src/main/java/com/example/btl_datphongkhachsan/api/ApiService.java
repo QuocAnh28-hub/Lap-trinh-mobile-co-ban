@@ -3,6 +3,7 @@ package com.example.btl_datphongkhachsan.api;
 import com.example.btl_datphongkhachsan.models.AvailableRoom;
 import com.example.btl_datphongkhachsan.models.BookingRequest;
 import com.example.btl_datphongkhachsan.models.CheckInRequest;
+import com.example.btl_datphongkhachsan.models.HotelService;
 import com.example.btl_datphongkhachsan.models.BookingResponse;
 import com.example.btl_datphongkhachsan.models.ChangePasswordRequest;
 import com.example.btl_datphongkhachsan.models.CreateInvoiceRequest;
@@ -38,6 +39,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -120,6 +122,9 @@ public interface ApiService {
     @GET("api/reservations/stays/{stayId}/service-usages")
     Call<List<ServiceUsage>> getServiceUsages(@Path("stayId") int stayId);
 
+    @POST("api/reservations/stays/{stayId}/service-usages")
+    Call<Map<String, String>> addServiceUsage(@Path("stayId") int stayId, @Body Map<String, Object> body);
+
     @GET("api/reservations/stays/{stayId}/minibar-usages")
     Call<List<MinibarUsage>> getMinibarUsages(@Path("stayId") int stayId);
 
@@ -149,4 +154,13 @@ public interface ApiService {
 
     @POST("api/reservations/transfer-room")
     Call<Map<String, String>> transferRoom(@Body TransferRoomRequest request);
+
+    @PATCH("api/reservations/stays/{stayId}/extend")
+    Call<Map<String, String>> extendStay(@Path("stayId") int stayId, @Body Map<String, String> body);
+
+    @GET("api/services")
+    Call<List<HotelService>> getAllHotelServices();
+
+    @DELETE("api/reservations/service-usages/{usageId}")
+    Call<Map<String, String>> deleteServiceUsage(@Path("usageId") int usageId);
 }

@@ -21,6 +21,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:tint="@color/black" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -81,33 +92,6 @@
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tvLabelRoom" />
 
-    <!-- Thông tin gia hạn -->
-    <TextView
-        android:id="@+id/tvLabelInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Thông tin gia hạn"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtRoomNumber" />
-
-    <EditText
-        android:id="@+id/edtExtendInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_edittext"
-        android:gravity="top"
-        android:hint="Nhập thông tin gia hạn (lý do)"
-        android:minLines="3"
-        android:padding="16dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelInfo" />
-
     <!-- Ngày Check-out mới -->
     <TextView
         android:id="@+id/tvLabelNewCheckOut"
@@ -119,7 +103,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtExtendInfo" />
+        app:layout_constraintTop_toBottomOf="@+id/edtRoomNumber" />
 
     <EditText
         android:id="@+id/edtNewCheckOutDate"
@@ -127,11 +111,11 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/bg_edittext"
-        android:drawableEnd="@drawable/outline_book_2_24"
+        android:drawableEnd="@drawable/outline_calendar_meal_24"
         android:drawableTint="@color/black"
         android:focusable="false"
         android:paddingHorizontal="16dp"
-        android:text="dd/mm/yyyy"
+        android:text="06/30/2026"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tvLabelNewCheckOut" />

@@ -61,6 +61,7 @@ public class StayingCustomerAdapter extends RecyclerView.Adapter<StayingCustomer
             intent.putExtra("STAY_ID", customer.getStayID());
             intent.putExtra("CUSTOMER_NAME", customer.getFullName());
             intent.putExtra("ROOM_NUMBER", customer.getRoomNumber());
+            intent.putExtra("CURRENT_CHECKOUT", customer.getCheckOutDate());
             v.getContext().startActivity(intent);
         });
 

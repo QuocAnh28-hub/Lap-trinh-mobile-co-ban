@@ -21,6 +21,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:tint="@color/black" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -94,6 +105,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edtRoomNumber" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvServiceUsage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/layoutAddService"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelService" />
+
     <TextView
         android:id="@+id/tvEmptyService"
         android:layout_width="match_parent"
@@ -104,6 +123,7 @@
         android:text="Chưa có dịch vụ nào được ghi nhận."
         android:textColor="#446699"
         android:textSize="15sp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/tvLabelService" />
 
     <!-- Thêm dịch vụ Row -->
@@ -114,7 +134,9 @@
         android:layout_marginTop="12dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tvEmptyService">
+        app:layout_constraintBottom_toTopOf="@id/bottomActionsLayout"
+        app:layout_constraintTop_toBottomOf="@id/rvServiceUsage"
+        app:layout_constraintVertical_bias="0">
 
         <Spinner
             android:id="@+id/spnService"
@@ -154,6 +176,7 @@
 
     <!-- Bottom Actions Layout -->
     <LinearLayout
+        android:id="@+id/bottomActionsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
