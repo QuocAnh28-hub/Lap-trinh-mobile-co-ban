@@ -5,6 +5,7 @@ import com.example.btl_datphongkhachsan.models.BookingRequest;
 import com.example.btl_datphongkhachsan.models.CheckInRequest;
 import com.example.btl_datphongkhachsan.models.HotelService;
 import com.example.btl_datphongkhachsan.models.BookingResponse;
+import com.example.btl_datphongkhachsan.models.MinibarItem;
 import com.example.btl_datphongkhachsan.models.ChangePasswordRequest;
 import com.example.btl_datphongkhachsan.models.CreateInvoiceRequest;
 import com.example.btl_datphongkhachsan.models.CreateInvoiceResponse;
@@ -128,8 +129,14 @@ public interface ApiService {
     @GET("api/reservations/stays/{stayId}/minibar-usages")
     Call<List<MinibarUsage>> getMinibarUsages(@Path("stayId") int stayId);
 
+    @DELETE("api/reservations/minibar-usages/{id}")
+    Call<Map<String, String>> deleteMinibarUsage(@Path("id") int id);
+
     @GET("api/reservations/stays/{stayId}/penalties")
     Call<List<PenaltyUsage>> getPenalties(@Path("stayId") int stayId);
+
+    @DELETE("api/reservations/penalties/{id}")
+    Call<Map<String, String>> deletePenalty(@Path("id") int id);
 
     // Room Status APIs
     @GET("api/rooms")
@@ -160,6 +167,9 @@ public interface ApiService {
 
     @GET("api/services")
     Call<List<HotelService>> getAllHotelServices();
+
+    @GET("api/reservations/rooms/{roomId}/minibar-items")
+    Call<List<MinibarItem>> getMinibarItemsForRoom(@Path("roomId") int roomId);
 
     @DELETE("api/reservations/service-usages/{usageId}")
     Call<Map<String, String>> deleteServiceUsage(@Path("usageId") int usageId);
