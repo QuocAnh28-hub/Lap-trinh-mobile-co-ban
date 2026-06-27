@@ -7,6 +7,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -53,23 +54,30 @@ public class R_ChangeRoom extends AppCompatActivity {
             return;
         }
 
-        TransferRoomRequest request = new TransferRoomRequest(stayId, oldRoomId, selectedRoom.getRoomID());
-        RetrofitClient.getApiService().transferRoom(request).enqueue(new Callback<Map<String, String>>() {
-            @Override
-            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(R_ChangeRoom.this, "Chuyển phòng thành công!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(R_ChangeRoom.this, "Chuyển phòng thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận chuyển phòng")
+                .setMessage("Bạn có chắc chắn muốn chuyển khách sang phòng " + selectedRoom.getRoomNumber() + " không?")
+                .setPositiveButton("Đồng ý", (dialog, which) -> {
+                    TransferRoomRequest request = new TransferRoomRequest(stayId, oldRoomId, selectedRoom.getRoomID());
+                    RetrofitClient.getApiService().transferRoom(request).enqueue(new Callback<Map<String, String>>() {
+                        @Override
+                        public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(R_ChangeRoom.this, "Chuyển phòng thành công!", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(R_ChangeRoom.this, "Chuyển phòng thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-            @Override
-            public void onFailure(Call<Map<String, String>> call, Throwable t) {
-                Toast.makeText(R_ChangeRoom.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                        @Override
+                        public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                            Toast.makeText(R_ChangeRoom.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private void initViews() {

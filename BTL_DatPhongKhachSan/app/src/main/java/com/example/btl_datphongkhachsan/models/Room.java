@@ -22,6 +22,9 @@ public class Room {
 
     @Override
     public String toString() {
-        return RoomNumber + " (" + RoomTypeName + ")";
+        if (RoomTypeName != null && !RoomTypeName.isEmpty()) {
+            return RoomNumber + " (" + RoomTypeName + ")";
+        }
+        return "Phòng " + RoomNumber;
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -75,26 +76,33 @@ public class R_CheckOut extends AppCompatActivity {
             return;
         }
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("StayID", stayId);
-        body.put("RoomID", roomId);
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận Check-out")
+                .setMessage("Bạn có chắc chắn muốn thực hiện Check-out cho phòng này không?")
+                .setPositiveButton("Đồng ý", (dialog, which) -> {
+                    Map<String, Object> body = new HashMap<>();
+                    body.put("StayID", stayId);
+                    body.put("RoomID", roomId);
 
-        RetrofitClient.getApiService().checkoutRoom(body).enqueue(new Callback<Map<String, String>>() {
-            @Override
-            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(R_CheckOut.this, "Check-out phòng thành công!", Toast.LENGTH_SHORT).show();
-                    finish(); // Quay lại màn hình danh sách
-                } else {
-                    Toast.makeText(R_CheckOut.this, "Check-out thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
+                    RetrofitClient.getApiService().checkoutRoom(body).enqueue(new Callback<Map<String, String>>() {
+                        @Override
+                        public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(R_CheckOut.this, "Check-out phòng thành công!", Toast.LENGTH_SHORT).show();
+                                finish(); // Quay lại màn hình danh sách
+                            } else {
+                                Toast.makeText(R_CheckOut.this, "Check-out thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-            @Override
-            public void onFailure(Call<Map<String, String>> call, Throwable t) {
-                Toast.makeText(R_CheckOut.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                        @Override
+                        public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                            Toast.makeText(R_CheckOut.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private void initViews() {

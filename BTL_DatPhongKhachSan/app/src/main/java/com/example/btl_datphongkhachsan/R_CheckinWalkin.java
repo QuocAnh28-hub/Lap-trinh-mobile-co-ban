@@ -3,9 +3,12 @@ package com.example.btl_datphongkhachsan;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,17 +16,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.text.ParseException;
+import com.example.btl_datphongkhachsan.api.RetrofitClient;
+import com.example.btl_datphongkhachsan.models.Room;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class R_CheckinWalkin extends AppCompatActivity {
 
-    private RelativeLayout checkoutdate;
-    private EditText etCheckoutDate;
+    private RelativeLayout layoutCheckoutDate;
+    private EditText etCheckoutDate, etFullName, etIdCard;
+    private Spinner spinnerRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +42,60 @@ public class R_CheckinWalkin extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.r_checkin_walkin);
 
+        initViews();
+        setupEdgeToEdge();
+
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-        checkoutdate = findViewById(R.id.layoutCheckoutDate);
+        
+        layoutCheckoutDate.setOnClickListener(v -> showDatePicker());
+        etCheckoutDate.setOnClickListener(v -> showDatePicker());
+        findViewById(R.id.btnCheckIn).setOnClickListener(v -> performCheckIn());
+    }
+
+    private void initViews() {
+        layoutCheckoutDate = findViewById(R.id.layoutCheckoutDate);
         etCheckoutDate = findViewById(R.id.etCheckoutDate);
+        etFullName = findViewById(R.id.etFullName);
+        etIdCard = findViewById(R.id.etIdCard);
+        spinnerRoom = findViewById(R.id.spinnerRoom);
+    }
 
-        checkoutdate.setOnClickListener(v -> showDatePicker(etCheckoutDate, etCheckoutDate));
+    private void performCheckIn() {
+        String fullName = etFullName.getText().toString().trim();
+        String cccd = etIdCard.getText().toString().trim();
+        String checkoutDate = etCheckoutDate.getText().toString().trim();
+        Room selectedRoom = (Room) spinnerRoom.getSelectedItem();
 
-        View mainView = findViewById(R.id.main);
-        int pLeft = mainView.getPaddingLeft();
-        int pTop = mainView.getPaddingTop();
-        int pRight = mainView.getPaddingRight();
-        int pBottom = mainView.getPaddingBottom();
+        if (fullName.isEmpty() || cccd.isEmpty() || checkoutDate.isEmpty() || selectedRoom == null) {
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left + pLeft, systemBars.top + pTop, systemBars.right + pRight, systemBars.bottom + pBottom);
-            return insets;
+        Map<String, Object> body = new HashMap<>();
+        body.put("FullName", fullName);
+        body.put("CCCD", cccd);
+        body.put("RoomID", selectedRoom.getRoomID());
+        body.put("ExpectedCheckOut", checkoutDate);
+
+        RetrofitClient.getApiService().checkInWalkin(body).enqueue(new Callback<Map<String, String>>() {
+            @Override
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(R_CheckinWalkin.this, "Check-in walk-in thành công!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(R_CheckinWalkin.this, "Check-in thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                Toast.makeText(R_CheckinWalkin.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    private void showDatePicker(EditText editText, TextView tvFormatted) {
+    private void showDatePicker() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -58,39 +103,52 @@ public class R_CheckinWalkin extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, monthOfYear, dayOfMonth) -> {
             String selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year1, (monthOfYear + 1), dayOfMonth);
-            editText.setText(selectedDate);
-            tvFormatted.setText(formatDatePretty(selectedDate));
+            etCheckoutDate.setText(selectedDate);
+            fetchAvailableRooms(selectedDate);
         }, year, month, day);
+        
+        // Chỉ cho phép chọn từ ngày mai
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         datePickerDialog.show();
     }
 
-    private long calculateNights(String start, String end) {
-        if (start == null || end == null || start.length() < 10 || end.length() < 10) return 1;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        try {
-            Date d1 = sdf.parse(start.substring(0, 10));
-            Date d2 = sdf.parse(end.substring(0, 10));
-            if (d1 == null || d2 == null) return 1;
-            long diff = d2.getTime() - d1.getTime();
-            long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-            return days > 0 ? days : 1;
-        } catch (ParseException e) { return 1; }
+    private void fetchAvailableRooms(String expectedCheckOut) {
+        RetrofitClient.getApiService().getAvailableRoomsForWalkin(expectedCheckOut).enqueue(new Callback<List<Room>>() {
+            @Override
+            public void onResponse(Call<List<Room>> call, Response<List<Room>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Room> rooms = response.body();
+                    ArrayAdapter<Room> adapter = new ArrayAdapter<>(R_CheckinWalkin.this,
+                            android.R.layout.simple_spinner_item, rooms);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerRoom.setAdapter(adapter);
+                    
+                    if (rooms.isEmpty()) {
+                        Toast.makeText(R_CheckinWalkin.this, "Không còn phòng trống trong thời gian này", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Hiển thị mã lỗi cụ thể để debug
+                    String errorMsg = "Lỗi server: " + response.code();
+                    if (response.code() == 405) errorMsg += " (Sai phương thức POST/GET)";
+                    if (response.code() == 404) errorMsg += " (Không tìm thấy đường dẫn)";
+                    Toast.makeText(R_CheckinWalkin.this, errorMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Room>> call, Throwable t) {
+                Toast.makeText(R_CheckinWalkin.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private String formatDate(String dateStr) {
-        if (dateStr == null || dateStr.length() < 10) return dateStr;
-        return dateStr.substring(0, 10);
-    }
-
-    private String formatDatePretty(String dateStr) {
-        if (dateStr == null || dateStr.length() < 10) return dateStr;
-        SimpleDateFormat fromSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat toSdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
-        try {
-            Date date = fromSdf.parse(dateStr);
-            return toSdf.format(date);
-        } catch (ParseException e) {
-            return dateStr;
-        }
+    private void setupEdgeToEdge() {
+        View mainView = findViewById(R.id.main);
+        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left + 48, systemBars.top + 48, systemBars.right + 48, systemBars.bottom + 48);
+            return insets;
+        });
     }
 }

@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -100,38 +101,45 @@ public class R_ExtendRoom extends AppCompatActivity {
             return;
         }
 
-        try {
-            // Chuyển đổi từ MM/dd/yyyy sang ISO format
-            SimpleDateFormat inputSdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(inputSdf.parse(newDate));
-            
-            SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy-MM-dd'T'12:00:00.000'Z'", Locale.getDefault());
-            String isoDate = outputSdf.format(calendar.getTime());
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận gia hạn")
+                .setMessage("Bạn có chắc chắn muốn gia hạn lưu trú đến ngày " + newDate + " không?")
+                .setPositiveButton("Đồng ý", (dialog, which) -> {
+                    try {
+                        // Chuyển đổi từ MM/dd/yyyy sang ISO format
+                        SimpleDateFormat inputSdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(inputSdf.parse(newDate));
 
-            Map<String, String> body = new HashMap<>();
-            body.put("NewCheckOut", isoDate);
+                        SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy-MM-dd'T'12:00:00.000'Z'", Locale.getDefault());
+                        String isoDate = outputSdf.format(calendar.getTime());
 
-            RetrofitClient.getApiService().extendStay(stayId, body).enqueue(new Callback<Map<String, String>>() {
-                @Override
-                public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(R_ExtendRoom.this, "Gia hạn lưu trú thành công!", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(R_ExtendRoom.this, "Gia hạn thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
+                        Map<String, String> body = new HashMap<>();
+                        body.put("NewCheckOut", isoDate);
+
+                        RetrofitClient.getApiService().extendStay(stayId, body).enqueue(new Callback<Map<String, String>>() {
+                            @Override
+                            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(R_ExtendRoom.this, "Gia hạn lưu trú thành công!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(R_ExtendRoom.this, "Gia hạn thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                                Toast.makeText(R_ExtendRoom.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        Toast.makeText(R_ExtendRoom.this, "Định dạng ngày không hợp lệ", Toast.LENGTH_SHORT).show();
                     }
-                }
-
-                @Override
-                public void onFailure(Call<Map<String, String>> call, Throwable t) {
-                    Toast.makeText(R_ExtendRoom.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } catch (Exception e) {
-            Toast.makeText(this, "Định dạng ngày không hợp lệ", Toast.LENGTH_SHORT).show();
-        }
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private String formatDatePretty(String dateStr) {

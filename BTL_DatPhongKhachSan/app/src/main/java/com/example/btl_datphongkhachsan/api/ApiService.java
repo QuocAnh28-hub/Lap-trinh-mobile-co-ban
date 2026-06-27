@@ -42,10 +42,12 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     @POST("api/login")
@@ -182,4 +184,10 @@ public interface ApiService {
 
     @DELETE("api/reservations/service-usages/{usageId}")
     Call<Map<String, String>> deleteServiceUsage(@Path("usageId") int usageId);
+
+    @GET("api/rooms/available")
+    Call<List<Room>> getAvailableRoomsForWalkin(@Query("ExpectedCheckOut") String expectedCheckOut);
+
+    @POST("api/reservations/checkin/walkin")
+    Call<Map<String, String>> checkInWalkin(@Body Map<String, Object> body);
 }
