@@ -129,11 +129,17 @@ public interface ApiService {
     @GET("api/reservations/stays/{stayId}/minibar-usages")
     Call<List<MinibarUsage>> getMinibarUsages(@Path("stayId") int stayId);
 
+    @POST("api/reservations/stays/{stayId}/minibar-usages")
+    Call<Map<String, String>> addMinibarUsage(@Path("stayId") int stayId, @Body Map<String, Object> body);
+
     @DELETE("api/reservations/minibar-usages/{id}")
     Call<Map<String, String>> deleteMinibarUsage(@Path("id") int id);
 
     @GET("api/reservations/stays/{stayId}/penalties")
     Call<List<PenaltyUsage>> getPenalties(@Path("stayId") int stayId);
+
+    @POST("api/reservations/stays/{stayId}/penalties")
+    Call<Map<String, String>> addPenalty(@Path("stayId") int stayId, @Body Map<String, Object> body);
 
     @DELETE("api/reservations/penalties/{id}")
     Call<Map<String, String>> deletePenalty(@Path("id") int id);
@@ -158,6 +164,9 @@ public interface ApiService {
 
     @POST("api/reservations/checkin/by-reservation")
     Call<Map<String, String>> checkInByReservation(@Body CheckInRequest request);
+
+    @POST("api/reservations/checkout-room")
+    Call<Map<String, String>> checkoutRoom(@Body Map<String, Object> body);
 
     @POST("api/reservations/transfer-room")
     Call<Map<String, String>> transferRoom(@Body TransferRoomRequest request);

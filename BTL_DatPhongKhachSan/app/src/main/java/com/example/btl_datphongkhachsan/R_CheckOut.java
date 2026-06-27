@@ -24,7 +24,9 @@ import com.example.btl_datphongkhachsan.models.MinibarUsage;
 import com.example.btl_datphongkhachsan.models.PenaltyUsage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -64,6 +66,35 @@ public class R_CheckOut extends AppCompatActivity {
         findViewById(R.id.btnCancel).setOnClickListener(v -> finish());
         findViewById(R.id.btnAddMinibar).setOnClickListener(v -> performAddMinibar());
         findViewById(R.id.btnAddFine).setOnClickListener(v -> performAddFine());
+        findViewById(R.id.btnConfirmCheckout).setOnClickListener(v -> performConfirmCheckout());
+    }
+
+    private void performConfirmCheckout() {
+        if (stayId == -1 || roomId == -1) {
+            Toast.makeText(this, "Thiếu thông tin lượt ở hoặc phòng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("StayID", stayId);
+        body.put("RoomID", roomId);
+
+        RetrofitClient.getApiService().checkoutRoom(body).enqueue(new Callback<Map<String, String>>() {
+            @Override
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(R_CheckOut.this, "Check-out phòng thành công!", Toast.LENGTH_SHORT).show();
+                    finish(); // Quay lại màn hình danh sách
+                } else {
+                    Toast.makeText(R_CheckOut.this, "Check-out thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                Toast.makeText(R_CheckOut.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initViews() {
@@ -126,6 +157,7 @@ public class R_CheckOut extends AppCompatActivity {
                     minibarList.addAll(response.body());
                     minibarAdapter.notifyDataSetChanged();
                     updateUIState();
+                    calculateTotalSum();
                 }
             }
             @Override
@@ -143,6 +175,7 @@ public class R_CheckOut extends AppCompatActivity {
                     penaltyList.addAll(response.body());
                     penaltyAdapter.notifyDataSetChanged();
                     updateUIState();
+                    calculateTotalSum();
                 }
             }
             @Override
@@ -179,13 +212,73 @@ public class R_CheckOut extends AppCompatActivity {
     }
 
     private void performAddMinibar() {
-        // Logic for adding minibar will go here
-        Toast.makeText(this, "Tính năng đang hoàn thiện", Toast.LENGTH_SHORT).show();
+        MinibarItem selectedItem = (MinibarItem) spnMinibar.getSelectedItem();
+        String quantityStr = edtMinibarQuantity.getText().toString().trim();
+
+        if (selectedItem == null) {
+            Toast.makeText(this, "Vui lòng chọn món", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (quantityStr.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int quantity = Integer.parseInt(quantityStr);
+        Map<String, Object> body = new HashMap<>();
+        body.put("MinibarID", selectedItem.getMiniBarID());
+        body.put("Quantity", quantity);
+
+        RetrofitClient.getApiService().addMinibarUsage(stayId, body).enqueue(new Callback<Map<String, String>>() {
+            @Override
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(R_CheckOut.this, "Thêm thành công!", Toast.LENGTH_SHORT).show();
+                    edtMinibarQuantity.setText("");
+                    fetchMinibarUsages();
+                }
+            }
+            @Override
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {}
+        });
     }
 
     private void performAddFine() {
-        // Logic for adding fine will go here
-        Toast.makeText(this, "Tính năng đang hoàn thiện", Toast.LENGTH_SHORT).show();
+        String reason = edtFineReason.getText().toString().trim();
+        String amountStr = edtFineAmount.getText().toString().trim();
+
+        if (reason.isEmpty() || amountStr.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập lý do và số tiền", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double amount = Double.parseDouble(amountStr);
+        Map<String, Object> body = new HashMap<>();
+        body.put("Reason", reason);
+        body.put("Amount", amount);
+
+        RetrofitClient.getApiService().addPenalty(stayId, body).enqueue(new Callback<Map<String, String>>() {
+            @Override
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(R_CheckOut.this, "Thêm phí phạt thành công!", Toast.LENGTH_SHORT).show();
+                    edtFineReason.setText("");
+                    edtFineAmount.setText("");
+                    fetchPenalties();
+                }
+            }
+            @Override
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {}
+        });
+    }
+
+    private void calculateTotalSum() {
+        double total = 0;
+        for (MinibarUsage m : minibarList) total += m.getTotal();
+        for (PenaltyUsage p : penaltyList) total += p.getAmount();
+        
+        tvTotal.setText(String.format(Locale.getDefault(), "Tổng:  %,.0fđ", total));
     }
 
     private void updateUIState() {
