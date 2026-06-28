@@ -65,6 +65,16 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        if (!phone.matches("^0\\d{9}$")) {
+            Toast.makeText(this, "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng số 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Định dạng email không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         RegisterRequest registerRequest = new RegisterRequest(fullName, phone, email, password);
         RetrofitClient.getApiService().register(registerRequest).enqueue(new Callback<RegisterResponse>() {
             @Override
